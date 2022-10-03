@@ -1,0 +1,37 @@
+---
+title: "Practical_maximum_likelihood_estimation_ Oscar_Contreras_Rafael_Castilla"
+author: "F.R.Castilla, O.Contreras"
+date: "2022-10-03"
+output: 
+  pdf_document:
+      latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## R Markdown
+
+Resolve the following exercise in groups of two students. Write your solution in a Word, Latex or Markdown document and generate a pdf file with your solution. 
+Upload the pdf file with your solution to the corresponding task at the Moodle environment of the course, no later than the hand-in date.
+
+1.(16p) ML estimation of a one-parameter distribution. 
+  Let X be a random variable with probability density
+$f(x|\beta)=\beta x^{b-1}$ with $\geq x\geq1$, $\beta >0$
+ we consider a random sample of n observation of this distribution.
+ 
+ a) (2p) Write down the likelihood function for a sample of n observations of this distribution.
+ <div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer: $L(f(x|\beta))=\prod_{i=1}^{n} f(x|\beta) =\prod_{i=1}^{n} \beta x^{b-1}=\beta^{n}x^{nb-n}$ 
+&emsp;
+</div>
+```{r}
+likelihood<-function(x,b,n){
+  l=b^n*x^(n*b-n)
+  return(l)
+}
+```
+b) (1p) Obtain the log-likelihood function
