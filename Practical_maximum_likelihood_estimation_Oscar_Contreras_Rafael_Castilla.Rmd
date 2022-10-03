@@ -29,9 +29,12 @@ Answer: $L(f(x|\beta))=\prod_{i=1}^{n} f(x|\beta) =\prod_{i=1}^{n} \beta x^{b-1}
 &emsp;
 </div>
 ```{r}
-likelihood<-function(x,b,n){
+like<-function(x,b,n){
   l=b^n*x^(n*b-n)
   return(l)
 }
 ```
 b) (1p) Obtain the log-likelihood function
+$l(f(x|\beta))=log(L(f(x)))=n log(b)+(nb-n)*log(x)$
+
+
