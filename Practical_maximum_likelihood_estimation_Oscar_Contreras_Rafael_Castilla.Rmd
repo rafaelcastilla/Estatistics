@@ -84,4 +84,9 @@ ggplot(d,aes(y=loglike,x=predictor))+
 
 ```
 the maximum correspond with the graph
-            
+          
+g) (1p) Determine an expression for the Fisher information by calculating
+$-E(\frac{d^2l}{d\beta^2})$
+$-E(\frac{n}{\beta^2})$
+
+
