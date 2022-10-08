@@ -29,35 +29,29 @@ Answer: $L(\beta|x)=\prod_{i=1}^{n} f(x_i|\beta) =\prod_{i=1}^{n} \beta x^{b-1}_
 &emsp;
 </div>
 ```{r}
-like<-function(x,b){
-  prod<-1
-  n<-nrow(x)
-  for (i in 1:n){
-   prod<-prod*(x[i]^{b-1})
-  }
-  l<-b^n*prod
+likeli<-function(b,x){
+  n<-row(x)
+  l<-b^n*prod(x^(b-1))  
   return(l)
 }
 ```
 b) (1p) Obtain the log-likelihood function
 $log(L(\beta|x_i) = nlog(\beta)+\sum^n_{i=1}(\beta-1)log(x_i)=nlog(\beta)+n(\beta-1)\sum^{n}_{i-1}log(x_i)$
 ```{r}
-loglike<-function(x,b){
-  n=nrow(x)
-  sum<-0
-  for(i in 1:n){
-    sum<-sum+log(x[i])
-  }
-  l<-n*log(b)+n(b-1)*sum
-  return(l)
+loglike<-function(b,x){
+n<-nrow(x)
+l<-n*log(b)+(n*(b-1))*sum(log(x))
+return(l)
 }
+
+
 ```
 
 c) (2p) Find the stationary point(s) of the log-likelihood function analytically.
-$\frac{dlog(L(\beta|x))}{d\beta}=\frac{n}{\beta}$
+$\frac{dlog(L(\beta|x))}{d\beta}=\frac{n}{\beta}+n\sum^n_{i=1}x_i$
 for find the stationary poitt the derivate qual to 0
-$0=\frac{n}{\beta}$\\
-$n=\beta$
+$0=\frac{n}{\beta}+n\sum^n_{i=1}x_i$\\
+$\beta=\frac{1}{sum^n_{i=1}log(x_i)}$
 
 
 d)(1p) Determine whether the stationary point(s) are maxima or minima.
@@ -74,12 +68,20 @@ and calculate the value of the ML estimator for this sample.
 x<-read.table('~/Statistic/Sample.dat')
 print(paste0("the sample size is: ", nrow(x)))
 #if use the derivate of loglikelihood
-b<-nrow(x)
-print(paste0("the ML estimator is: ",b))
+ml<--1/sum(log(x))
+print(paste0("the ML estimator is: ",ml))
 
 ```
 
+f) 2p) Plot the log-likelihood function, and assess graphically if your ML estimate coincides with the maximum of this function.
 
+```{r}
+library(ggplot2)
+b<-seq(0.0,0.02,by=0.001)
+d<-data.frame("predictor"=b,"loglike"=loglike(b,x))
+ggplot(d,aes(y=loglike,x=predictor))+
+  geom_point()+geom_point(aes(ml,loglike(ml,x)),colour="red")
 
-            
+```
+the maximum correspond with the graph
             
