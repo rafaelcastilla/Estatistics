@@ -89,4 +89,33 @@ g) (1p) Determine an expression for the Fisher information by calculating
 $-E(\frac{d^2l}{d\beta^2})$
 $-E(\frac{n}{\beta^2})$
 
+h) (1p) Use the Fisher information for obtaining an expression for the variance of the maximum likelihood estimator $\beta$ML.
+$(\sigma,\frac{1}{l(\beta)})$
+$(\sigma,\frac{\beta^2}{n})$
+the variance is $\frac{\beta^2}{n}$
+
+i) (1p) Using the asymptotic normality of the ML estimator, give an expression of a confidence interval for β.
+
+a clasic example of asymptomatic normality is $N \thicksim  (\mu , \sigma^2)| CI(\mu)_{1-\alpha}=\bar{x}\pm Z_{\frac{\alpha}{2}}*\sqrt{V(\hat\beta)}$
+
+$CI(\mu)_{1-\alpha}=\bar{x}\pm Z_{\frac{\alpha}{2}}*\sqrt{\frac{\beta^2}{n}}$
+
+j) (1p) Calculate a 95% confidence interval for parameter β, using the dataset that you have downloaded
+$CI(\mu)_{1-\alpha}=\bar{x}\pm Z_{\frac{\alpha}{2}}*\sqrt{\frac{\beta^2}{n}}$
+```{r}
+v=sqrt(ml^2/n)
+CIp=ml+1.96*v
+CIn=ml-1.96*v
+print(paste0("the confidence interval is ",paste0(round(CIn,5),paste0(" : ",round(CIp,5)))))
+```
+k) (1p) Do you think it is tenable that $\beta$ = 1? Argue your answer.
+
+have 95% chance of 0.00556 and 00662 and $\beta = 1$ is not between into the coefficient
+
+l) (2p) Make a histogram of the data, using function hist, using the argument freq=FALSE. Overplot the histogram with the estimated probability density $f(x|\beta)$, using the maximum likelihood estimate.What do you observe?
+$f(x|\beta)=\beta x^{b-1}$
+```{r}
+f=ml*x^{ml-1}
+hist(f[,1])
+```
 
