@@ -103,7 +103,7 @@ $CI(\mu)_{1-\alpha}=\bar{x}\pm Z_{\frac{\alpha}{2}}*\sqrt{\frac{\beta^2}{n}}$
 j) (1p) Calculate a 95% confidence interval for parameter β, using the dataset that you have downloaded
 $CI(\mu)_{1-\alpha}=\bar{x}\pm Z_{\frac{\alpha}{2}}*\sqrt{\frac{\beta^2}{n}}$
 ```{r}
-v=sqrt(ml^2/n)
+v=sqrt(ml^2/nrow(x))
 CIp=ml+1.96*v
 CIn=ml-1.96*v
 print(paste0("the confidence interval is ",paste0(round(CIn,5),paste0(" : ",round(CIp,5)))))
