@@ -1,0 +1,155 @@
+---
+title: "Practical_maximum_likelihood_estimation_ Oscar_Contreras_Rafael_Castilla"
+author: "F.R.Castilla, O.Contreras"
+date: "2022-10-03"
+output: 
+  pdf_document:
+      latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## R Markdown
+
+<p>Resolve the following exercise in groups of two students. Write your solution in a Word, Latex or Markdown document and generate a pdf file with your solution. 
+Upload the pdf file with your solution to the corresponding task at the Moodle environment of the course, no later than the hand-in date.</p>
+
+<p>1.(16p) ML estimation of a one-parameter distribution. \
+  Let X be a random variable with probability density $f(x|\beta)=\beta x^{b-1}$ with $\geq x\geq1$, $\beta >0$ we consider a random sample of n observation of this distribution.
+</p>
+ 
+ a) (2p) Write down the likelihood function for a sample of n observations of this distribution.
+ 
+ <div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer: $L(\beta|x)=\prod_{i=1}^{n} f(x_i|\beta) =\prod_{i=1}^{n} \beta x^{b-1}_{i}=\beta^{n}\prod_{i=1}^{n}x_i^{b-1}$
+&emsp;
+</div>
+
+```{r}
+likeli<-function(b,x){
+  n<-row(x)
+  l<-b^n*prod(x^(b-1))  
+  return(l)
+}
+```
+b) (1p) Obtain the log-likelihood function\
+  <div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer: $log(L(\beta|x_i) = nlog(\beta)+\sum^n_{i=1}(\beta-1)log(x_i)=nlog(\beta)+n(\beta-1)\sum^{n}_{i-1}log(x_i)$
+&emsp;
+</div>
+
+```{r}
+loglike<-function(b,x){
+n<-nrow(x)
+l<-n*log(b)+(n*(b-1))*sum(log(x))
+return(l)
+}
+
+```
+
+c) (2p) Find the stationary point(s) of the log-likelihood function analytically.\
+  <div style="background-color:#F0F0F0">
+
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer: $\frac{dlog(L(\beta|x))}{d\beta}=\frac{n}{\beta}+n\sum^n_{i=1}x_i$\
+for find the stationary poitt the derivate qual to 0\
+$0=\frac{n}{\beta}+n\sum^n_{i=1}x_i$\
+$\beta=\frac{1}{sum^n_{i=1}log(x_i)}$
+&emsp;
+</div>
+
+d)(1p) Determine whether the stationary point(s) are maxima or minima.\
+  <div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer: for know if the stationary point is maxims or minima the need the 2 derivate \
+$\frac{d^2l}{d^2\beta}=-\frac{n}{\beta^2}$ \
+and if the result is positive is the minimum and if is negative is a maximum\
+&emsp;
+</div>
+
+e) 1p) Download the file Sample.dat, which contains sample of observations from this probability distribution. Determine the sample size and calculate the value of the ML estimator for this sample.
+
+```{r}
+x<-read.table('~/Statistic/Sample.dat')
+print(paste0("the sample size is: ", nrow(x)))
+#if use the derivate of loglikelihood
+ml<--1/sum(log(x))
+print(paste0("the ML estimator is: ",ml))
+
+```
+
+f) 2p) Plot the log-likelihood function, and assess graphically if your ML estimate coincides with the maximum of this function.
+
+```{r}
+library(ggplot2)
+b<-seq(0.0,0.02,by=0.001)
+d<-data.frame("predictor"=b,"loglike"=loglike(b,x))
+ggplot(d,aes(y=loglike,x=predictor))+
+  geom_point()+geom_point(aes(ml,loglike(ml,x)),colour="red")
+
+```
+  <div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer: the maximum correspond with the graph
+&emsp;
+</div>
+          
+g) (1p) Determine an expression for the Fisher information by calculating
+
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer:$-E(\frac{d^2l}{d\beta^2})$ \
+$-E(\frac{n}{\beta^2})$
+&emsp;
+</div>
+h) (1p) Use the Fisher information for obtaining an expression for the variance of the maximum likelihood estimator $\beta$ML. \
+<div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer:$(\sigma,\frac{1}{l(\beta)})$\
+$(\sigma,\frac{\beta^2}{n})$\
+the variance is $\frac{\beta^2}{n}$\
+&emsp;
+</div>
+
+i) (1p) Using the asymptotic normality of the ML estimator, give an expression of a confidence interval for β.\
+<div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer:A clasic example of asymptomatic normality is $N \thicksim  (\mu , \sigma^2)| CI(\mu)_{1-\alpha}=\bar{x}\pm Z_{\frac{\alpha}{2}}*\sqrt{V(\hat\beta)}$
+$CI(\mu)_{1-\alpha}=\bar{x}\pm Z_{\frac{\alpha}{2}}*\sqrt{\frac{\beta^2}{n}}$
+&emsp;
+</div>
+
+j) (1p) Calculate a 95% confidence interval for parameter β, using the dataset that you have downloaded
+<div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer:$CI(\mu)_{1-\alpha}=\bar{x}\pm Z_{\frac{\alpha}{2}}*\sqrt{\frac{\beta^2}{n}}$
+```{r}
+v=sqrt(ml^2/nrow(x))
+CIp=ml+1.96*v
+CIn=ml-1.96*v
+print(paste0("the confidence interval is ",paste0(round(CIn,5),paste0(" : ",round(CIp,5)))))
+```
+&emsp;
+</div>
+
+k) (1p) Do you think it is tenable that $\beta$ = 1? Argue your answer.
+  <div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer: Have 95% chance of 0.00556 and 00662 and $\beta = 1$ is not between into the coefficient
+&emsp;
+</div>
+l) (2p) Make a histogram of the data, using function hist, using the argument freq=FALSE. Overplot the histogram with the estimated probability density $f(x|\beta)$, using the maximum likelihood estimate.What do you observe?
+  <div style="background-color:#F0F0F0">
+&emsp;<i class="fas fa-comment-dots"></i>
+Answer:$f(x|\beta)=\beta x^{b-1}$
+&emsp;
+</div>
+```{r}
+f=ml*x^{ml-1}
+hist(f[,1])
+```
+
