@@ -33,13 +33,16 @@ types could it theoretically have? Estimate all relative genotype
 frequencies by maximum likelihood (ML). Report the values of
 the ML estimators.
 
-in our case have 2 snp AT and TT and teoricaly could have 16 4base *4bases  but if only have 2 bases its binominal
-the estimators of $\hat{p}=\frac{x_i}{n}$
+have 2 genotype and 3 fenotype
+
 ```{r}
+#the frequence
 x<-c(AT=40,TT=100)
-p_i=x[1]/n
-p=(factorial(n)/(factorial(x[1])*factorial(n-x[1])))*p_i^x[1]*(1-p_i)^x[2]
-p
+p_AT=x[1]/n
+p_AT
+p_TT=x[2]/n
+p_TT
+
 ```
 
 
@@ -47,14 +50,42 @@ p
 Estimate the relative allele frequencies by ML. Report the values
 of the ML estimators.
 ```{r}
-p_AT=x[1]/n
-p_AT
-p_TT=x[2]/n
-p_TT
-print(paste0("the values of ml estimator is for AT: ",round(p_AT,2)))
-x[1]
-x[2]
-print(paste0("the values of ml estimator is for AT: ",round(p_AT,2)))
-print(paste0("the values of ml estimator is for AT: ",round(p_TT,2)))
+A=(0+40)/(140*2)
+T=(40+100*2)/(140*2)
+A
+T
+
 
 ```
+
+(d) (1p) Which allele is the minor (least common) allele?
+
+the allele minor is A
+
+
+(e) (1p) Do a likelihood ratio test (LRT) for Hardy-Weinberg equilibrium using the HWLratio function of the R-package HardyWein-
+berg. Report the likelihood ratio statistic and the p-value.
+```{r}
+library(HardyWeinberg)
+x <- c(AA=0,AT=40,TT=100)
+HWLratio(x,verbose=TRUE)
+``` 
+(f) (1p) State your conclusion of the LRT.
+p-value is less that 0.05 and i reject the neutral hypothesis and the data not follow the hardy-winberg equilibrium
+
+(h) (1p) Calculate the p-value ”by hand” using the value observed for the LR statistic and its distribution. Show your computations.
+Do you obtain the same result as the HWLratio function?
+$x^2=n(\frac{4n_{AA} . n_{TT}-n_{AT}^2}{(2n_{AA}+n_{AT})(2n_{TT}+n_{AT})})²$
+```{r}
+n
+x <- c(AA=0,AT=40,TT=100)
+l1<-(4*x[1]*x[3]-x[2]^2)
+l1
+l2<-(2*x[1]+x[2])*(2*x[3]+x[2])
+l2
+
+X2<-n*(l1/l2)^2
+X2
+pchisq(X2, 1, lower.tail = TRUE)
+```
+
