@@ -1,0 +1,60 @@
+---
+title: "Likelihood ratio tests"
+author: "F.R.Castilla"
+date: "2022-10-17"
+output: 
+  pdf_document:
+      latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Resolve the following exercises in groups of two students. Write your solution in a Word, Latex or Markdown document and generate a pdf file with your solution. Upload the pdf file with your solution to the corresponding task at the Moodle environment of the course, no later than the hand-in date.
+
+
+### Many well-known standard statistical tests are actually LRT tests. We do some exercises with data sets where we apply these LRT tests.
+
+1. (10p) Likelihood 
+ratio test for Hardy-Weinberg equilibrium. In a genetic association study, the genotypes of a single nucleotide polymorphism have been determined for a sample of individuals. The genotype data file snp.dat contains the genotyping results.
+
+(a) (1p) Load the data in the R environment, and make a table of the different genotypes. Report the table. What is the sample size of the study?
+```{r}
+genotype<-read.table("snp.dat")
+table(genotype)
+n=nrow(genotype)
+print(paste0("the sample size of this study is: ",n))
+```
+
+
+(b) (1p) How many alleles does this SNP have? How many geno-
+types could it theoretically have? Estimate all relative genotype
+frequencies by maximum likelihood (ML). Report the values of
+the ML estimators.
+
+in our case have 2 snp AT and TT and teoricaly could have 16 4base *4bases  but if only have 2 bases its binominal
+the estimators of $\hat{p}=\frac{x_i}{n}$
+```{r}
+x<-c(AT=40,TT=100)
+p_i=x[1]/n
+p=(factorial(n)/(factorial(x[1])*factorial(n-x[1])))*p_i^x[1]*(1-p_i)^x[2]
+p
+```
+
+
+(c) (2p) Count the number of alleles of each type in the sample.
+Estimate the relative allele frequencies by ML. Report the values
+of the ML estimators.
+```{r}
+p_AT=x[1]/n
+p_AT
+p_TT=x[2]/n
+p_TT
+print(paste0("the values of ml estimator is for AT: ",round(p_AT,2)))
+x[1]
+x[2]
+print(paste0("the values of ml estimator is for AT: ",round(p_AT,2)))
+print(paste0("the values of ml estimator is for AT: ",round(p_TT,2)))
+
+```
