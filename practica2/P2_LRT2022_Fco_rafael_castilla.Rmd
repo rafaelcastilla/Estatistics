@@ -28,13 +28,10 @@ print(paste0("the sample size of this study is: ",n))
 ```
 
 
-(b) (1p) How many alleles does this SNP have? How many geno-
-types could it theoretically have? Estimate all relative genotype
-frequencies by maximum likelihood (ML). Report the values of
+(b) (1p) How many alleles does this SNP have? How many genotypes could it theoretically have? Estimate all relative genotype frequencies by maximum likelihood (ML). Report the values of
 the ML estimators.
 
-have 2 genotype and 3 fenotype
-
+in the data have 2 alleles and 3 genotypes
 ```{r}
 #the frequence
 x<-c(AT=40,TT=100)
@@ -46,16 +43,12 @@ p_TT
 ```
 
 
-(c) (2p) Count the number of alleles of each type in the sample.
-Estimate the relative allele frequencies by ML. Report the values
-of the ML estimators.
+(c) (2p) Count the number of alleles of each type in the sample. Estimate the relative allele frequencies by ML. Report the values of the ML estimators.
 ```{r}
 A=(0+40)/(140*2)
 T=(40+100*2)/(140*2)
-A
-T
-
-
+print(paste0("the relatice allele frequencies of A is: "),A)
+print(paste0("the relative allele frequencies of T is: ",T))
 ```
 
 (d) (1p) Which allele is the minor (least common) allele?
@@ -63,18 +56,21 @@ T
 the allele minor is A
 
 
-(e) (1p) Do a likelihood ratio test (LRT) for Hardy-Weinberg equilibrium using the HWLratio function of the R-package HardyWein-
-berg. Report the likelihood ratio statistic and the p-value.
+(e) (1p) Do a likelihood ratio test (LRT) for Hardy-Weinberg equilibrium using the HWLratio function of the R-package HardyWeinberg. Report the likelihood ratio statistic and the p-value.
 ```{r}
 library(HardyWeinberg)
 x <- c(AA=0,AT=40,TT=100)
 HWLratio(x,verbose=TRUE)
-``` 
-(f) (1p) State your conclusion of the LRT.
+```
+
+
+(f) (1p) State your conclusion of the LRT. 
+
 p-value is less that 0.05 and i reject the neutral hypothesis and the data not follow the hardy-winberg equilibrium
 
-(h) (1p) Calculate the p-value ”by hand” using the value observed for the LR statistic and its distribution. Show your computations.
-Do you obtain the same result as the HWLratio function?
+
+
+(h) (1p) Calculate the p-value ”by hand” using the value observed for the LR statistic and its distribution. Show your computations. Do you obtain the same result as the HWLratio function?
 $x^2=n(\frac{4n_{AA} . n_{TT}-n_{AT}^2}{(2n_{AA}+n_{AT})(2n_{TT}+n_{AT})})²$
 ```{r}
 n
@@ -88,4 +84,73 @@ X2<-n*(l1/l2)^2
 X2
 pchisq(X2, 1, lower.tail = TRUE)
 ```
+the p-value obtained by hand is not the same that the p-value obtained by function
+
+
+(i) (1p) Calculate the expected genotype counts under the assumption of Hardy-Weinberg equilibrium. Compare them with the observed counts. What do you observe?
+ 
+```{r}
+#if T^2 is 0,714
+t=sqrt(0.714)
+
+a=1-t
+
+AA=(a^2)*n
+AT=(a*t)*n
+TT=(t^2)*n
+AA
+AT
+TT
+```
+the genotype TT is the same but AT or AA no 
+
+### 2. (10p) Comparison of regression models. In a study on quality of red wines, a set of physicochemical variables has been collected for a large database of red wines. The variable quality is used as the response variable in a multiple regression with the physicochemical variables 1as predictors. Most physicochemical variables were log-transformed to reduce skew. The available predictors are fixed.acidity, volatile.acidity, citric.acid, residual.sugar, chlorides, free.sulfur.dioxide, total.sulfur.dioxide, density, pH, sulphates and alcohol. The file RedWines.dat contains the data.
+
+(a) Load the data into the R environment with the read.table in-
+struction.
+```{r}
+Y=read.table("RedWines.dat",header = T)
+Y
+```
+
+(b) (2p) Fit a full model by the regression of quality on all physicochemical predictors. Report the adjusted R2 statistic of this model. Which variables are not significant? (use α = 0.05).
+
+```{r}
+wine<-lm(quality~fixed.acidity+volatile.acidity+citric.acid+residual.sugar+chlorides+free.sulfur.dioxide+total.sulfur.dioxide+density+pH+sulphates+alcohol,data=Y)
+summary(wine)
+
+```
+this variables are not significant
+fixed.acidity        .  
+citric.acid             
+residual.sugar       .  
+density              .  
+pH                      
+
+
+
+(c) (2p) Fit a reduced model, eliminating all insignificant predictors from the regression equation in a stepwise fashion (use α = 0.05).Report the adjusted R2 statistic of this reduced model. Does this model have a better or worse fit, according to this statistic?
+```{r}
+wine_reduce<-lm(data=Y,formula = quality ~  volatile.acidity  + chlorides + free.sulfur.dioxide + total.sulfur.dioxide+ sulphates + alcohol)
+summary(wine_reduce)
+```
+the first model adjust better that the second
+
+(d) (2p) Do a likelihood ratio test (F -test) to see whether the full or reduced model fits the data better. Report the F statistic, its reference distribution and the p-value, and state your conclusion.
+```{r}
+anova(wine,wine_reduce)
+```
+ 
+if use the anova test the 2 model is better
+
+(e) (2p) Do simple linear regressions of quality on the predictors that you eliminated from the model. Do these regressions confirm that the eliminated predictors do not explain quality? State your findings and conclusions.
+```{r}
+wine_eliminate<-lm(quality~fixed.acidity+citric.acid+residual.sugar+density+pH,data=Y)
+summary(wine_eliminate)
+
+```
+porque aunque puede llegar a explicar algo no afecta lo suficiente como para ser relevantes
+
+
+(f) (2p) Are regression coefficients you found in the different regressions consistent with each other? Comment on your findings.
 
